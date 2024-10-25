@@ -83,28 +83,27 @@ router.get('/:id', async (req, res) => {
 
 
 router.get('/usersAndCards/:sessionId', async (req, res) => {
-    res.status(200).send('this thing is working ')
-    // try {
-    //     const sessionId = req.params.sessionId;
+    try {
+        const sessionId = req.params.sessionId;
 
-    //     // Find all UserSessionCard documents associated with the given sessionId
-    //     const userSessionCards = await UserSessionCards.find({ sessionId })
-    //         .populate('userId', ['name', 'email']) // Populate the 'userId' field with the 'name' property from the 'User' model
-    //         .populate('sessionId', 'title') // Populate the 'sessionId' field with the 'title' property from the 'Session' model;
+        // Find all UserSessionCard documents associated with the given sessionId
+        const userSessionCards = await UserSessionCards.find({ sessionId })
+            .populate('userId', ['name', 'email']) // Populate the 'userId' field with the 'name' property from the 'User' model
+            .populate('sessionId', 'title') // Populate the 'sessionId' field with the 'title' property from the 'Session' model;
 
-    //     // Create a CSV string from the userSessionCards data
-    //     const csvString = createCsvString(userSessionCards);
+        // Create a CSV string from the userSessionCards data
+        const csvString = createCsvString(userSessionCards);
 
-    //     // Set the response headers for CSV download
-    //     res.setHeader('Content-Type', 'text/csv');
-    //     res.setHeader('Content-Disposition', `attachment; filename="usersAndCards.csv"`);
+        // Set the response headers for CSV download
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename="usersAndCards.csv"`);
 
-    //     // Send the CSV string as the response body
-    //     res.send(csvString);
-    // } catch (error) {
-    //     console.error('Error fetching user session cards:', error);
-    //     res.status(500).send('An error occurred while fetching user session cards.');
-    // }
+        // Send the CSV string as the response body
+        res.send(csvString);
+    } catch (error) {
+        console.error('Error fetching user session cards:', error);
+        res.status(500).send('An error occurred while fetching user session cards.');
+    }
 });
 
 // Update a session and its associated users
