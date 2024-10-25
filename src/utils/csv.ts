@@ -15,7 +15,7 @@ export function createCsvString(userSessionCards: IUserSessionCards[]): string {
 
     // Create a CSV string by iterating over userSessionCards and appending rows
     const csvRows = userSessionCards.map(card => {
-        return `${normalizeCardName(card.userId.name)} ${card.userId.email},${card.card}`;
+        return `${card.userId.name} ${card.userId.email},${normalizeCardName(card.card)}`;
     });
 
     const csvString = headerRow.join(',') + '\n' + csvRows.join('\n');
