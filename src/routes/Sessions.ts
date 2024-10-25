@@ -26,33 +26,33 @@ router.post('/', async (req, res) => {
 // Get all sessions with user card submission count
 router.get('/', async (req, res) => {
     try {
-      // Aggregate sessions and count how many users submitted cards for each session
-      const sessions = await Session.aggregate([
-        {
-          $lookup: {
-            from: 'usersessioncards', // Collection name for UserSessionCards
-            localField: '_id',        // Field in Session to match
-            foreignField: 'sessionId',// Field in UserSessionCards to match
-            as: 'submittedCards'      // Alias for the matched data
-          }
-        },
-        {
-          $addFields: {
-            cardSubmissionCount: { $size: '$submittedCards' } // Count the submissions for each session
-          }
-        }
-      ]);
-  
-      res.json(sessions);
+        // Aggregate sessions and count how many users submitted cards for each session
+        const sessions = await Session.aggregate([
+            {
+                $lookup: {
+                    from: 'usersessioncards', // Collection name for UserSessionCards
+                    localField: '_id',        // Field in Session to match
+                    foreignField: 'sessionId',// Field in UserSessionCards to match
+                    as: 'submittedCards'      // Alias for the matched data
+                }
+            },
+            {
+                $addFields: {
+                    cardSubmissionCount: { $size: '$submittedCards' } // Count the submissions for each session
+                }
+            }
+        ]);
+
+        res.json(sessions);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).json({ error: error.message });
-      } else {
-        res.status(500).json({ error: 'Unknown error occurred' });
-      }
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        }
     }
-  });
-  
+});
+
 // Get a specific session with users
 router.get('/:id', async (req, res) => {
     try {
@@ -88,8 +88,8 @@ router.get('/usersAndCards/:sessionId', async (req, res) => {
 
         // Find all UserSessionCard documents associated with the given sessionId
         const userSessionCards = await UserSessionCards.find({ sessionId })
-        .populate('userId', 'name') // Populate the 'userId' field with the 'name' property from the 'User' model
-        .populate('sessionId', 'title') // Populate the 'sessionId' field with the 'title' property from the 'Session' model;
+            .populate('userId', ['name', 'email']) // Populate the 'userId' field with the 'name' property from the 'User' model
+            .populate('sessionId', 'title') // Populate the 'sessionId' field with the 'title' property from the 'Session' model;
 
         // Create a CSV string from the userSessionCards data
         const csvString = createCsvString(userSessionCards);
