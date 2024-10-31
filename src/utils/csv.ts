@@ -11,11 +11,11 @@ const normalizeCardName = (cardName: string) => {
 }
 export function createCsvString(userSessionCards: IUserSessionCards[]): string {
     // Define the CSV header row
-    const headerRow = ['Name', 'Email', 'Card'];
+    const headerRow = ['Name', 'Card', 'Email'];
 
     // Create a CSV string by iterating over userSessionCards and appending rows
     const csvRows = userSessionCards.map(card => {
-        return `${card.userId.name} ${card.userId.email},${normalizeCardName(card.card)}`;
+        return `${card.userId.name} ${normalizeCardName(card.card)}, ${card.userId.email}`;
     });
 
     const csvString = headerRow.join(',') + '\n' + csvRows.join('\n');
