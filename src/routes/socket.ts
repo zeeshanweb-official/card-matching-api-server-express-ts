@@ -82,6 +82,21 @@ export default function initializeSocket(io: Server) {
       }
     });
 
+    socket.on('getAllSelectedCardsForASession', async ({ sessionId }) => {
+      try {
+        // Retrieve all cards associated with the given sessionId
+        const selectedCards = await userSessionCards.find({ sessionId });
+
+        // Optionally, emit the retrieved cards back to the client
+        console.log(selectedCards)
+        socket.emit('fetchedselectedCards', { cards: selectedCards });
+      } catch (error) {
+        console.error('Error getting other users selected cards:', error);
+        // Optionally, emit an error message to the client
+        socket.emit('error', { message: 'An error occurred while getting the other users cards.' });
+      }
+    });
+
   });
 }
 
