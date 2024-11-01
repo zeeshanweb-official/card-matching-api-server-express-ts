@@ -88,7 +88,6 @@ export default function initializeSocket(io: Server) {
         const selectedCards = await userSessionCards.find({ sessionId });
 
         // Optionally, emit the retrieved cards back to the client
-        console.log(selectedCards)
         socket.emit('fetchedselectedCards', { cards: selectedCards });
       } catch (error) {
         console.error('Error getting other users selected cards:', error);
